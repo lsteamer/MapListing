@@ -13,6 +13,7 @@ public interface Contract {
     }
 
     interface PresenterContract {
-
+        void listClick();
+        void mapClick();
     }
 }
