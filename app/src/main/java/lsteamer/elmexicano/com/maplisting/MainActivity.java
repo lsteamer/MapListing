@@ -27,6 +27,7 @@ import lsteamer.elmexicano.com.maplisting.mvp.MapView;
 import lsteamer.elmexicano.com.maplisting.mvp.Presenter;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
+import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -69,11 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    public void onPostCreate(@Nullable Bundle savedInstanceState, @Nullable PersistableBundle persistentState) {
-        super.onPostCreate(savedInstanceState, persistentState);
-    }
-
     @OnClick(R.id.landingButton)
     void startApp() {
         if (requestLocationPermission()) {
@@ -95,18 +91,19 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     //todo I'm sending the fragments directly, It's not optimal but I'll revisit this later
     private void setupViewPager(ViewPager viewPager, ListView list, MapView map) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(list, list.TAG);
-        adapter.addFragment(map, map.TAG);
+        adapter.addFragment(list, getString(R.string.tab_text_1));
+        adapter.addFragment(map, getString(R.string.tab_text_2));
         viewPager.setAdapter(adapter);
     }
 
 
     public boolean requestLocationPermission() {
-        if (ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{ACCESS_COARSE_LOCATION}, 1);
+        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
             return false;
         } else
             setLocation();
@@ -115,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void setLocation() {
-        if (ActivityCompat.checkSelfPermission(this, ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
                 @Override
                 public void onSuccess(Location location) {
@@ -128,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setPresenter(Location location) {
-        presenter = new Presenter(listView, mapView, location);
+        presenter = new Presenter(listView, mapView, locationClient, location);
     }
 
 

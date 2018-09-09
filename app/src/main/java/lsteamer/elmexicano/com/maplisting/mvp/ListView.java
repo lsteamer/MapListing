@@ -34,9 +34,6 @@ public class ListView extends Fragment implements Contract.ListViewContract {
         presenter = presenterContract;
     }
 
-    @OnClick(R.id.buttonList)
-    void someSome(){
-        presenter.listClick();
-    }
+
 
 }

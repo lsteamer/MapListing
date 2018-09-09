@@ -1,43 +1,75 @@
 package lsteamer.elmexicano.com.maplisting.mvp;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import lsteamer.elmexicano.com.maplisting.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
-public class MapView extends Fragment implements Contract.MapViewContract {
+import lsteamer.elmexicano.com.maplisting.MainActivity;
+import lsteamer.elmexicano.com.maplisting.utils.Utils;
+
+
+public class MapView extends SupportMapFragment implements Contract.MapViewContract, OnMapReadyCallback {
 
     public static final String TAG = "Map";
 
+    private static final float DEFAULT_ZOOM = 14;
+
     private Contract.PresenterContract presenter;
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //todo variable view is redundant
-        View view = inflater.inflate(R.layout.map_fragment,container,false);
+    private GoogleMap map;
 
-        ButterKnife.bind(this, view);
-
-        return view;
+    public MapView() {
     }
 
+    @Override
+    public void onActivityCreated(Bundle bundle) {
+        super.onActivityCreated(bundle);
+        getMapAsync(this);
+    }
 
     @Override
     public void setPresenter(Presenter presenterContract) {
         presenter = presenterContract;
     }
 
-    @OnClick(R.id.buttonMap)
-    void someSome(){
-        presenter.mapClick();
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        map = googleMap;
+
+        LatLng currentLocation = Utils.getLatLonWithLocation(presenter.getLocation());
+
+        //map.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
+
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        map.setMyLocationEnabled(true);
+        moveCamera(currentLocation, DEFAULT_ZOOM);
+
+    }
+
+    public void moveCamera(LatLng latLng, float zoom){
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
 }
