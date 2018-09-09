@@ -17,14 +17,21 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import lsteamer.elmexicano.com.maplisting.model.CarData;
+import lsteamer.elmexicano.com.maplisting.model.Feed;
 import lsteamer.elmexicano.com.maplisting.mvp.ListView;
 import lsteamer.elmexicano.com.maplisting.mvp.MapView;
 import lsteamer.elmexicano.com.maplisting.mvp.Presenter;
+import lsteamer.elmexicano.com.maplisting.utils.Utils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static android.Manifest.permission.ACCESS_FINE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private static MapView mapView;
     private static Presenter presenter;
 
+    private List<CarData> carDataList;
 
     private SectionsPageAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
@@ -64,6 +72,22 @@ public class MainActivity extends AppCompatActivity {
         requestLocationPermission();
 
         startApp();
+
+        Call<Feed> data = Utils.getLoginRequestData(Utils.FULL_URL);
+        data.enqueue(new Callback<Feed>() {
+            @Override
+            public void onResponse(Call<Feed> call, Response<Feed> response) {
+                if(response.body() != null){
+                    carDataList = response.body().getCarData();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Feed> call, Throwable t) {
+
+            }
+        });
 
 
     }
@@ -123,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setPresenter(Location location) {
-        presenter = new Presenter(listView, mapView, locationClient, location);
+        presenter = new Presenter(listView, mapView, locationClient, location, carDataList);
     }
 
 
