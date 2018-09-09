@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -27,6 +26,7 @@ import lsteamer.elmexicano.com.maplisting.model.Feed;
 import lsteamer.elmexicano.com.maplisting.mvp.ListView;
 import lsteamer.elmexicano.com.maplisting.mvp.MapView;
 import lsteamer.elmexicano.com.maplisting.mvp.Presenter;
+import lsteamer.elmexicano.com.maplisting.utils.SectionsPageAdapter;
 import lsteamer.elmexicano.com.maplisting.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -43,13 +43,16 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout tabbedLayout;
 
     public FusedLocationProviderClient locationClient;
+    private Location currentLocation;
+    private boolean loc;
 
 
-    private static ListView listView;
-    private static MapView mapView;
-    private static Presenter presenter;
+    private ListView listView;
+    private MapView mapView;
+    private Presenter presenter;
 
     private List<CarData> carDataList;
+    private boolean list;
 
     private SectionsPageAdapter sectionsPagerAdapter;
     private ViewPager viewPager;
@@ -58,6 +61,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        loc = false;
+        list = false;
 
 
         ButterKnife.bind(this);
@@ -79,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Feed> call, Response<Feed> response) {
                 if(response.body() != null){
                     carDataList = response.body().getCarData();
+                    presenter.setAdapter(carDataList);
 
                 }
             }
@@ -139,15 +146,20 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Location location) {
                     if (location != null) {
-                        setPresenter(location);
+                        currentLocation = location;
+
+                        setPresenter();
 
                     }
                 }
             });
     }
 
-    private void setPresenter(Location location) {
-        presenter = new Presenter(listView, mapView, locationClient, location, carDataList);
+    private void setPresenter() {
+
+
+            presenter = new Presenter(listView, mapView, locationClient, currentLocation, carDataList);
+
     }
 
 

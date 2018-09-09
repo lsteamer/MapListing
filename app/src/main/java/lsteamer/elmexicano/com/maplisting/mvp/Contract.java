@@ -4,10 +4,15 @@ import android.location.Location;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 
+import java.util.List;
+
+import lsteamer.elmexicano.com.maplisting.model.CarData;
+
 public interface Contract {
 
     interface ListViewContract{
         void setPresenter(Presenter presenter);
+        void startAdapter(List<CarData> carDataList);
 
     }
 
@@ -20,5 +25,6 @@ public interface Contract {
         Location getLocation();
         double getLocationLatitude();
         double getLocationLongitude();
+        List<CarData> getCarDataList();
     }
 }
