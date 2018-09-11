@@ -34,5 +34,6 @@ public interface Contract {
         double getLocationLongitude();
         List<CarData> getCarDataList();
         void onMapLocationSelected(int tag);
+        boolean getUnitSelectedBoolean();
     }
 }

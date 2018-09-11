@@ -25,7 +25,7 @@ public class Presenter implements Contract.PresenterContract {
     private List<MarkerOptions> markerOptions;
     private List<Marker> markerList;
 
-    private boolean unitSelected;
+    private boolean unitSelectedFlag;
 
 
     private Location location;
@@ -45,7 +45,7 @@ public class Presenter implements Contract.PresenterContract {
 
         this.carDataList = carList;
 
-        unitSelected = false;
+        unitSelectedFlag = false;
     }
 
     //When we finally receive the data
@@ -59,19 +59,19 @@ public class Presenter implements Contract.PresenterContract {
 
 
     public void onMapLocationSelected(int tag) {
-        if (unitSelected) {
+        if (unitSelectedFlag) {
             for (Marker marker : markerList) {
                 mapView.setMarkerVisible(marker);
                 if (tag == (Integer) marker.getTag())
                     mapView.hideInfoWindowOfMarker(marker);
             }
-            unitSelected = false;
+            unitSelectedFlag = false;
         } else {
             for (Marker marker : markerList) {
                 if (tag != (Integer) marker.getTag())
                     mapView.setMarkerInvisible(marker);
             }
-            unitSelected = true;
+            unitSelectedFlag = true;
         }
 
     }
@@ -90,6 +90,10 @@ public class Presenter implements Contract.PresenterContract {
 
     public List<CarData> getCarDataList() {
         return carDataList;
+    }
+
+    public boolean getUnitSelectedBoolean(){
+        return unitSelectedFlag;
     }
 
 
