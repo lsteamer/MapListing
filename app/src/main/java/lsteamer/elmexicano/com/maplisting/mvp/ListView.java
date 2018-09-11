@@ -15,7 +15,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import lsteamer.elmexicano.com.maplisting.R;
 import lsteamer.elmexicano.com.maplisting.model.CarData;
 import lsteamer.elmexicano.com.maplisting.utils.CarAdapter;
@@ -37,10 +36,9 @@ public class ListView extends Fragment implements Contract.ListViewContract {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.list_fragment,container,false);
+        View view = inflater.inflate(R.layout.list_fragment, container, false);
 
         ButterKnife.bind(this, view);
-
 
 
         return view;

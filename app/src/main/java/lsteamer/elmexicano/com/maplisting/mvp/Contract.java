@@ -2,10 +2,9 @@ package lsteamer.elmexicano.com.maplisting.mvp;
 
 import android.location.Location;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -21,11 +20,10 @@ public interface Contract {
 
     interface MapViewContract{
         void setPresenter(Presenter presenter);
-        //void addMarker(MarkerOptions marker);
         void setMarkerVisible(Marker marker);
         void setMarkerInvisible(Marker marker);
         GoogleMap getMapVariable();
-        void hideInfoWindowOfMarker(Marker marker);
+        void setCameraToLocation(LatLng latLng, GoogleMap googleMap);
     }
 
     interface PresenterContract {
@@ -35,5 +33,6 @@ public interface Contract {
         List<CarData> getCarDataList();
         void onMapLocationSelected(String tag);
         boolean getUnitSelectedBoolean();
+        void setMap(GoogleMap map);
     }
 }

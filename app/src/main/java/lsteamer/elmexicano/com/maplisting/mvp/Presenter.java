@@ -1,11 +1,9 @@
 package lsteamer.elmexicano.com.maplisting.mvp;
 
 import android.location.Location;
-import android.util.Log;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -24,12 +22,11 @@ public class Presenter implements Contract.PresenterContract {
 
     private boolean unitSelectedFlag;
 
-
     private Location location;
 
-    public Presenter(Contract.ListViewContract listViewLayer, Contract.MapViewContract mapViewLayer, Location location, List<CarData> carList) {
-        this.location = location;
+    private GoogleMap googleMap;
 
+    public Presenter(Contract.ListViewContract listViewLayer, Contract.MapViewContract mapViewLayer) {
 
         this.listView = listViewLayer;
         listView.setPresenter(this);
@@ -37,37 +34,40 @@ public class Presenter implements Contract.PresenterContract {
         this.mapView = mapViewLayer;
         mapView.setPresenter(this);
 
-
-        this.carDataList = carList;
-
         unitSelectedFlag = false;
     }
 
-    //When we finally receive the data
+    //Receiving the data for the List
     public void startDataInFragments(List<CarData> carList) {
         this.carDataList = carList;
         listView.startAdapter(carDataList);
         markerList = Utils.getMarkerList(carDataList, mapView.getMapVariable());
     }
 
+    //Receiving the user Location
     public void setUserLocation(Location userLocation) {
         location = userLocation;
+        //todo this causes a crash. Why?
+        //mapView.setCameraToLocation(Utils.getLatLonWithLocation(location), googleMap);
+    }
+
+    //Receiving the Map variable
+    public void setMap(GoogleMap map){
+        googleMap = map;
     }
 
 
     public void onMapLocationSelected(String tag) {
         if (unitSelectedFlag) {
-            for (Marker marker : markerList) {
+            for (Marker marker : markerList)
                 mapView.setMarkerVisible(marker);
-                if (tag == marker.getTag())
-                    mapView.hideInfoWindowOfMarker(marker);
-            }
+
             unitSelectedFlag = false;
         } else {
-            for (Marker marker : markerList) {
+            for (Marker marker : markerList)
                 if (tag != marker.getTag())
                     mapView.setMarkerInvisible(marker);
-            }
+
             unitSelectedFlag = true;
         }
 

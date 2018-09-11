@@ -27,21 +27,22 @@ public class Utils {
     public static final String FULL_URL = "https://s3-us-west-2.amazonaws.com/wunderbucket/";
 
 
-    public static LatLng getLatLonWithListCoordinates(List<String> coordinates){
+    public static LatLng getLatLonWithListCoordinates(List<String> coordinates) {
         double lon = Double.parseDouble(coordinates.get(0));
         double lat = Double.parseDouble(coordinates.get(1));
         return new LatLng(lat, lon);
     }
 
-    public static LatLng getDefaultLatLon(){
+    public static LatLng getDefaultLatLon() {
         return new LatLng(53.5511d, 9.9937d);
     }
 
-    public static LatLng getLatLonWithLocation(Location location){
+    public static LatLng getLatLonWithLocation(Location location) {
         return new LatLng(location.getLatitude(), location.getLongitude());
     }
 
 
+    //Retrofit call
     public static Call<Feed> getLoginRequestData(@NonNull String url) {
         Retrofit retrofit;
         retrofit = new Retrofit.Builder()
@@ -53,12 +54,14 @@ public class Utils {
         return requestData.getData();
     }
 
-    public static List<Marker> getMarkerList(List<CarData> carDataList, GoogleMap map){
+
+    //Gets the markers information with the Car coordinates
+    public static List<Marker> getMarkerList(List<CarData> carDataList, GoogleMap map) {
         List<Marker> markerList = new ArrayList<>();
 
         int tag = 0;
 
-        for(CarData car : carDataList){
+        for (CarData car : carDataList) {
             LatLng latLng = getLatLonWithListCoordinates(car.getCoordinates());
             Marker marker = map.addMarker(new MarkerOptions()
                     .position(latLng)
