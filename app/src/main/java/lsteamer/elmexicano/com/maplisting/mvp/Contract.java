@@ -3,6 +3,7 @@ package lsteamer.elmexicano.com.maplisting.mvp;
 import android.location.Location;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -18,7 +19,9 @@ public interface Contract {
 
     interface MapViewContract{
         void setPresenter(Presenter presenter);
-
+        void addMarker(MarkerOptions marker);
+        void setMarkerVisible(MarkerOptions marker);
+        void setMarkerInvisible(MarkerOptions marker);
     }
 
     interface PresenterContract {

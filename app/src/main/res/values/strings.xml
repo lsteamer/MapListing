@@ -6,4 +6,6 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="okay">Okay</string>
     <string name="please_share_location">Please share your location to proceed</string>
+    <string name="name">Name:</string>
+    <string name="address">Address:</string>
 </resources>

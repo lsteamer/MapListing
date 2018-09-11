@@ -4,6 +4,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ public class Presenter implements Contract.PresenterContract {
     private FusedLocationProviderClient locationProvider;
 
     private List<CarData> carDataList;
+    private List<MarkerOptions> markerOptions;
 
 
     private Location location;
@@ -40,12 +42,18 @@ public class Presenter implements Contract.PresenterContract {
 
     }
 
-    public void setAdapter(List<CarData> carList){
+    //When we finally receive the data
+    public void startDataInFragments(List<CarData> carList){
         this.carDataList = carList;
-        Log.d(TAG, "some; " + carDataList.get(0).getAddress());
+        createMarkerOptionsList();
         listView.startAdapter(carDataList);
 
     }
+
+    public void createMarkerOptionsList(){
+        markerOptions = null;
+    }
+
     public Location getLocation(){
         return location;
     }
@@ -61,6 +69,7 @@ public class Presenter implements Contract.PresenterContract {
     public List<CarData> getCarDataList(){
         return carDataList;
     }
+
 
 
 }

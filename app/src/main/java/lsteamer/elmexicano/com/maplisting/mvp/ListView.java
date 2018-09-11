@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class ListView extends Fragment implements Contract.ListViewContract {
 
     private CarAdapter adapter;
 
+    @BindView(R.id.loadingIndicator)
+    ProgressBar loadingCircle;
     @BindView(R.id.recyclerViewCars)
     RecyclerView carRecyclerView;
 
@@ -50,6 +53,7 @@ public class ListView extends Fragment implements Contract.ListViewContract {
         carRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CarAdapter(carDataList, getContext());
         carRecyclerView.setAdapter(adapter);
+        toggleLayoutVisibility();
     }
 
 
@@ -58,6 +62,17 @@ public class ListView extends Fragment implements Contract.ListViewContract {
         presenter = presenterContract;
     }
 
+
+    private void toggleLayoutVisibility() {
+        if (loadingCircle.getVisibility() == View.VISIBLE) {
+            loadingCircle.setVisibility(View.INVISIBLE);
+            carRecyclerView.setVisibility(View.VISIBLE);
+        } else {
+            loadingCircle.setVisibility(View.VISIBLE);
+            carRecyclerView.setVisibility(View.INVISIBLE);
+        }
+
+    }
 
 
 }

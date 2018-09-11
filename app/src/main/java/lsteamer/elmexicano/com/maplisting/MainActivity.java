@@ -85,7 +85,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Feed> call, Response<Feed> response) {
                 if(response.body() != null){
                     carDataList = response.body().getCarData();
-                    presenter.setAdapter(carDataList);
+
+
+                    //todo if location is obtained after the list, app will break
+                    presenter.startDataInFragments(carDataList);
 
                 }
             }
@@ -148,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
                     if (location != null) {
                         currentLocation = location;
 
+                        //todo if location is obtained after the list, app will break
                         setPresenter();
 
                     }
@@ -156,8 +160,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setPresenter() {
-
-
             presenter = new Presenter(listView, mapView, locationClient, currentLocation, carDataList);
 
     }

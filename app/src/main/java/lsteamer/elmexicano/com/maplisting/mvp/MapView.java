@@ -12,6 +12,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import lsteamer.elmexicano.com.maplisting.utils.Utils;
 
@@ -49,6 +50,7 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
 
         //map.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
 
+
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -62,6 +64,19 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
 
         map.setMyLocationEnabled(true);
         moveCamera(currentLocation, DEFAULT_ZOOM);
+
+    }
+
+    public void addMarker(MarkerOptions marker){
+        map.addMarker(marker);
+    }
+
+    @Override
+    public void setMarkerVisible(MarkerOptions marker){
+
+    }
+    @Override
+    public void setMarkerInvisible(MarkerOptions marker){
 
     }
 
