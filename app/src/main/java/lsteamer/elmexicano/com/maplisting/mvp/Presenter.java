@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import lsteamer.elmexicano.com.maplisting.model.CarData;
+import lsteamer.elmexicano.com.maplisting.utils.Utils;
 
 public class Presenter implements Contract.PresenterContract {
 
@@ -45,13 +46,17 @@ public class Presenter implements Contract.PresenterContract {
     //When we finally receive the data
     public void startDataInFragments(List<CarData> carList){
         this.carDataList = carList;
-        createMarkerOptionsList();
+        markerOptions = Utils.getMarkerOptionsList(carDataList);
         listView.startAdapter(carDataList);
+        setMarkerOptions();
 
     }
 
-    public void createMarkerOptionsList(){
-        markerOptions = null;
+    private void setMarkerOptions(){
+        for(MarkerOptions marker : markerOptions){
+            mapView.addMarker(marker);
+        }
+
     }
 
     public Location getLocation(){
