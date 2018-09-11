@@ -79,6 +79,7 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
 
     @Override
     public void setMarkerVisible(Marker marker){
+        marker.setVisible(true);
 
     }
     @Override
@@ -87,13 +88,18 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
 
     }
 
+    @Override
+    public void hideInfoWindowOfMarker(Marker marker){
+        Log.d(TAG, "marker tag: "+ marker.getTag());
+        marker.hideInfoWindow();
+    }
+
     public void moveCamera(LatLng latLng, float zoom){
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        Log.d(TAG,"marker: " + marker.getTag());
         presenter.onMapLocationSelected((Integer) marker.getTag());
         return false;
     }

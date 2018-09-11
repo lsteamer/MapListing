@@ -25,6 +25,7 @@ public interface Contract {
         void setMarkerVisible(Marker marker);
         void setMarkerInvisible(Marker marker);
         GoogleMap getMapVariable();
+        void hideInfoWindowOfMarker(Marker marker);
     }
 
     interface PresenterContract {

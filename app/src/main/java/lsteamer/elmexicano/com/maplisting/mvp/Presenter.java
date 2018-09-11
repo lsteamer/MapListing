@@ -25,10 +25,12 @@ public class Presenter implements Contract.PresenterContract {
     private List<MarkerOptions> markerOptions;
     private List<Marker> markerList;
 
+    private boolean unitSelected;
+
 
     private Location location;
 
-    public Presenter(Contract.ListViewContract listViewLayer, Contract.MapViewContract mapViewLayer, FusedLocationProviderClient locationProvider, Location location, List<CarData> carList){
+    public Presenter(Contract.ListViewContract listViewLayer, Contract.MapViewContract mapViewLayer, FusedLocationProviderClient locationProvider, Location location, List<CarData> carList) {
 
         this.locationProvider = locationProvider;
         this.location = location;
@@ -43,10 +45,11 @@ public class Presenter implements Contract.PresenterContract {
 
         this.carDataList = carList;
 
+        unitSelected = false;
     }
 
     //When we finally receive the data
-    public void startDataInFragments(List<CarData> carList){
+    public void startDataInFragments(List<CarData> carList) {
         this.carDataList = carList;
         //markerOptions = Utils.getMarkerOptionsList(carDataList, mapView.getMapVariable());
         listView.startAdapter(carDataList);
@@ -54,39 +57,40 @@ public class Presenter implements Contract.PresenterContract {
         markerList = Utils.getMarkerList(carDataList, mapView.getMapVariable());
     }
 
-    //todo to delete
-    public void setMarkerOptions(){
-        for(MarkerOptions marker : markerOptions){
-            //mapView.addMarker(marker);
+
+    public void onMapLocationSelected(int tag) {
+        if (unitSelected) {
+            for (Marker marker : markerList) {
+                mapView.setMarkerVisible(marker);
+                if (tag == (Integer) marker.getTag())
+                    mapView.hideInfoWindowOfMarker(marker);
+            }
+            unitSelected = false;
+        } else {
+            for (Marker marker : markerList) {
+                if (tag != (Integer) marker.getTag())
+                    mapView.setMarkerInvisible(marker);
+            }
+            unitSelected = true;
         }
 
     }
 
-    public void onMapLocationSelected(int tag){
-
-        for(Marker marker : markerList){
-            if(tag!= (Integer) marker.getTag())
-                mapView.setMarkerInvisible(marker);
-        }
-
-    }
-
-    public Location getLocation(){
+    public Location getLocation() {
         return location;
     }
 
-    public double getLocationLongitude(){
+    public double getLocationLongitude() {
         return location.getLongitude();
     }
 
-    public double getLocationLatitude(){
+    public double getLocationLatitude() {
         return location.getLatitude();
     }
 
-    public List<CarData> getCarDataList(){
+    public List<CarData> getCarDataList() {
         return carDataList;
     }
-
 
 
 }
