@@ -12,12 +12,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import lsteamer.elmexicano.com.maplisting.utils.Utils;
 
 
-public class MapView extends SupportMapFragment implements Contract.MapViewContract, OnMapReadyCallback {
+public class MapView extends SupportMapFragment implements Contract.MapViewContract, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     public static final String TAG = "Map";
 
@@ -63,8 +64,13 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
         }
 
         map.setMyLocationEnabled(true);
+        map.setOnMarkerClickListener(this);
         moveCamera(currentLocation, DEFAULT_ZOOM);
 
+    }
+
+    public GoogleMap getMapVariable(){
+        return map;
     }
 
     public void addMarker(MarkerOptions marker){
@@ -72,11 +78,12 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
     }
 
     @Override
-    public void setMarkerVisible(MarkerOptions marker){
+    public void setMarkerVisible(Marker marker){
 
     }
     @Override
-    public void setMarkerInvisible(MarkerOptions marker){
+    public void setMarkerInvisible(Marker marker){
+        marker.setVisible(false);
 
     }
 
@@ -84,4 +91,10 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom));
     }
 
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        Log.d(TAG,"marker: " + marker.getTag());
+        presenter.onMapLocationSelected((Integer) marker.getTag());
+        return false;
+    }
 }

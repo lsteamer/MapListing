@@ -3,7 +3,9 @@ package lsteamer.elmexicano.com.maplisting.utils;
 import android.location.Location;
 import android.support.annotation.NonNull;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
@@ -44,16 +46,41 @@ public class Utils {
     }
 
 
-    public static List<MarkerOptions> getMarkerOptionsList(List<CarData> carDataList){
+    public static List<MarkerOptions> getMarkerOptionsList(List<CarData> carDataList, GoogleMap map){
         List<MarkerOptions> markerOptionsList = new ArrayList<>();
+
+        int tag = 0;
 
         for(CarData car : carDataList){
             LatLng latLng = getLatLonWithListCoordinates(car.getCoordinates());
-            markerOptionsList.add(new MarkerOptions()
-            .position(latLng));
+            MarkerOptions marker = new MarkerOptions()
+                    .position(latLng)
+                    .title(car.getAddress());
+
+            markerOptionsList.add(marker);
         }
 
         return markerOptionsList;
+    }
+
+
+    public static List<Marker> getMarkerList(List<CarData> carDataList, GoogleMap map){
+        List<Marker> markerList = new ArrayList<>();
+
+        int tag = 0;
+
+        for(CarData car : carDataList){
+            LatLng latLng = getLatLonWithListCoordinates(car.getCoordinates());
+            Marker marker = map.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(car.getAddress()));
+
+            marker.setTag(tag);
+            tag++;
+            markerList.add(marker);
+        }
+
+        return markerList;
     }
 
 

@@ -4,6 +4,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class Presenter implements Contract.PresenterContract {
 
     private List<CarData> carDataList;
     private List<MarkerOptions> markerOptions;
+    private List<Marker> markerList;
 
 
     private Location location;
@@ -46,15 +48,25 @@ public class Presenter implements Contract.PresenterContract {
     //When we finally receive the data
     public void startDataInFragments(List<CarData> carList){
         this.carDataList = carList;
-        markerOptions = Utils.getMarkerOptionsList(carDataList);
+        //markerOptions = Utils.getMarkerOptionsList(carDataList, mapView.getMapVariable());
         listView.startAdapter(carDataList);
-        setMarkerOptions();
+        //setMarkerOptions();
+        markerList = Utils.getMarkerList(carDataList, mapView.getMapVariable());
+    }
+
+    //todo to delete
+    public void setMarkerOptions(){
+        for(MarkerOptions marker : markerOptions){
+            //mapView.addMarker(marker);
+        }
 
     }
 
-    private void setMarkerOptions(){
-        for(MarkerOptions marker : markerOptions){
-            mapView.addMarker(marker);
+    public void onMapLocationSelected(int tag){
+
+        for(Marker marker : markerList){
+            if(tag!= (Integer) marker.getTag())
+                mapView.setMarkerInvisible(marker);
         }
 
     }
