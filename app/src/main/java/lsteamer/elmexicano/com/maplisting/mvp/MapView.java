@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
@@ -47,25 +48,19 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        LatLng currentLocation = Utils.getLatLonWithLocation(presenter.getLocation());
+        //LatLng currentLocation = Utils.getLatLonWithLocation(presenter.getLocation());
 
         //map.addMarker(new MarkerOptions().position(currentLocation).title("Current Location"));
 
 
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
+
             return;
         }
 
         map.setMyLocationEnabled(true);
         map.setOnMarkerClickListener(this);
-        moveCamera(currentLocation, DEFAULT_ZOOM);
+        moveCamera(Utils.getDefaultLatLon(), DEFAULT_ZOOM);
 
     }
 
@@ -100,7 +95,7 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-        presenter.onMapLocationSelected((Integer) marker.getTag());
+        presenter.onMapLocationSelected((String) marker.getTag());
         return !presenter.getUnitSelectedBoolean();
     }
 }

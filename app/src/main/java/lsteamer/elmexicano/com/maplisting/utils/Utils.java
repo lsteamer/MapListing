@@ -20,6 +20,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Utils {
 
+    private Utils() {
+        throw new AssertionError("No instances!");
+    }
+
     public static final String FULL_URL = "https://s3-us-west-2.amazonaws.com/wunderbucket/";
 
 
@@ -27,6 +31,10 @@ public class Utils {
         double lon = Double.parseDouble(coordinates.get(0));
         double lat = Double.parseDouble(coordinates.get(1));
         return new LatLng(lat, lon);
+    }
+
+    public static LatLng getDefaultLatLon(){
+        return new LatLng(53.5511d, 9.9937d);
     }
 
     public static LatLng getLatLonWithLocation(Location location){
@@ -45,25 +53,6 @@ public class Utils {
         return requestData.getData();
     }
 
-
-    public static List<MarkerOptions> getMarkerOptionsList(List<CarData> carDataList, GoogleMap map){
-        List<MarkerOptions> markerOptionsList = new ArrayList<>();
-
-        int tag = 0;
-
-        for(CarData car : carDataList){
-            LatLng latLng = getLatLonWithListCoordinates(car.getCoordinates());
-            MarkerOptions marker = new MarkerOptions()
-                    .position(latLng)
-                    .title(car.getAddress());
-
-            markerOptionsList.add(marker);
-        }
-
-        return markerOptionsList;
-    }
-
-
     public static List<Marker> getMarkerList(List<CarData> carDataList, GoogleMap map){
         List<Marker> markerList = new ArrayList<>();
 
@@ -75,7 +64,7 @@ public class Utils {
                     .position(latLng)
                     .title(car.getAddress()));
 
-            marker.setTag(tag);
+            marker.setTag(Integer.toString(tag));
             tag++;
             markerList.add(marker);
         }

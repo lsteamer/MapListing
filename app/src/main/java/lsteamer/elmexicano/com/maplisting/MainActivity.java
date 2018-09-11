@@ -2,6 +2,8 @@ package lsteamer.elmexicano.com.maplisting;
 
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -65,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         loc = false;
         list = false;
 
-
         ButterKnife.bind(this);
 
 
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         Call<Feed> data = Utils.getLoginRequestData(Utils.FULL_URL);
         data.enqueue(new Callback<Feed>() {
             @Override
-            public void onResponse(Call<Feed> call, Response<Feed> response) {
+            public void onResponse(@NonNull  Call<Feed> call, @NonNull  Response<Feed> response) {
                 if(response.body() != null){
                     carDataList = response.body().getCarData();
 
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Feed> call, Throwable t) {
+            public void onFailure(@NonNull Call<Feed> call, @NonNull Throwable t) {
 
             }
         });
@@ -160,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setPresenter() {
-            presenter = new Presenter(listView, mapView, locationClient, currentLocation, carDataList);
+            presenter = new Presenter(listView, mapView, currentLocation, carDataList);
 
     }
 

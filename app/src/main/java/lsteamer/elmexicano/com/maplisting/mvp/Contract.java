@@ -33,7 +33,7 @@ public interface Contract {
         double getLocationLatitude();
         double getLocationLongitude();
         List<CarData> getCarDataList();
-        void onMapLocationSelected(int tag);
+        void onMapLocationSelected(String tag);
         boolean getUnitSelectedBoolean();
     }
 }

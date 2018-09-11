@@ -19,10 +19,7 @@ public class Presenter implements Contract.PresenterContract {
     private Contract.ListViewContract listView;
     private Contract.MapViewContract mapView;
 
-    private FusedLocationProviderClient locationProvider;
-
     private List<CarData> carDataList;
-    private List<MarkerOptions> markerOptions;
     private List<Marker> markerList;
 
     private boolean unitSelectedFlag;
@@ -30,9 +27,7 @@ public class Presenter implements Contract.PresenterContract {
 
     private Location location;
 
-    public Presenter(Contract.ListViewContract listViewLayer, Contract.MapViewContract mapViewLayer, FusedLocationProviderClient locationProvider, Location location, List<CarData> carList) {
-
-        this.locationProvider = locationProvider;
+    public Presenter(Contract.ListViewContract listViewLayer, Contract.MapViewContract mapViewLayer, Location location, List<CarData> carList) {
         this.location = location;
 
 
@@ -51,24 +46,26 @@ public class Presenter implements Contract.PresenterContract {
     //When we finally receive the data
     public void startDataInFragments(List<CarData> carList) {
         this.carDataList = carList;
-        //markerOptions = Utils.getMarkerOptionsList(carDataList, mapView.getMapVariable());
         listView.startAdapter(carDataList);
-        //setMarkerOptions();
         markerList = Utils.getMarkerList(carDataList, mapView.getMapVariable());
     }
 
+    public void setUserLocation(Location userLocation) {
+        location = userLocation;
+    }
 
-    public void onMapLocationSelected(int tag) {
+
+    public void onMapLocationSelected(String tag) {
         if (unitSelectedFlag) {
             for (Marker marker : markerList) {
                 mapView.setMarkerVisible(marker);
-                if (tag == (Integer) marker.getTag())
+                if (tag == marker.getTag())
                     mapView.hideInfoWindowOfMarker(marker);
             }
             unitSelectedFlag = false;
         } else {
             for (Marker marker : markerList) {
-                if (tag != (Integer) marker.getTag())
+                if (tag != marker.getTag())
                     mapView.setMarkerInvisible(marker);
             }
             unitSelectedFlag = true;
@@ -92,7 +89,7 @@ public class Presenter implements Contract.PresenterContract {
         return carDataList;
     }
 
-    public boolean getUnitSelectedBoolean(){
+    public boolean getUnitSelectedBoolean() {
         return unitSelectedFlag;
     }
 
