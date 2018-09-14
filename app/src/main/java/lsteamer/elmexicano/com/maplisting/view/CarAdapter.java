@@ -16,9 +16,14 @@ public class CarAdapter extends RecyclerView.Adapter<CarViewHolder> {
 
 
     private List<CarData> carList;
+
+    /*
+     * Context is not need with the app's current state
+     * but it will if the app is to be expanded.
+     */
     private Context context;
 
-    public CarAdapter(List<CarData> list, Context context){
+    public CarAdapter(List<CarData> list, Context context) {
         this.carList = list;
         this.context = context;
     }

@@ -24,7 +24,7 @@ public class CarViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void populate(CarData car){
+    public void populate(CarData car) {
         carAddress.setText(car.getAddress());
         carName.setText(car.getName());
     }

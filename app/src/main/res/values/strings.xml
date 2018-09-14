@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">MapListing</string>
-    <string name="tab_text_1">List</string>
-    <string name="tab_text_2">Map</string>
+    <string name="tab_title_list">List</string>
+    <string name="tab_title_map">Map</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="okay">Okay</string>
     <string name="please_share_location">Please share your location to proceed</string>
     <string name="name">Name:</string>
     <string name="address">Address:</string>
+    <string name="fail">Check your connection and try again.</string>
 </resources>

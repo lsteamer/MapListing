@@ -3,7 +3,6 @@ package lsteamer.elmexicano.com.maplisting.view;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,7 +20,6 @@ import lsteamer.elmexicano.com.maplisting.Presenter;
 
 public class MapViewLayer extends SupportMapFragment implements Contract.MapViewContract, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    public static final String TAG = "Map";
 
     private static final float DEFAULT_ZOOM = 14;
 
@@ -58,22 +56,23 @@ public class MapViewLayer extends SupportMapFragment implements Contract.MapView
 
     }
 
-    public GoogleMap getMapVariable(){
+    public GoogleMap getMapVariable() {
         return map;
     }
 
     @Override
-    public void setMarkerVisible(Marker marker){
+    public void setMarkerVisible(Marker marker) {
         marker.setVisible(true);
 
     }
+
     @Override
-    public void setMarkerInvisible(Marker marker){
+    public void setMarkerInvisible(Marker marker) {
         marker.setVisible(false);
 
     }
 
-    public void setCameraToLocation(LatLng latLng){
+    public void setCameraToLocation(LatLng latLng) {
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
     }
 

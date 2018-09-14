@@ -13,8 +13,6 @@ import lsteamer.elmexicano.com.maplisting.utils.Utils;
 
 public class Presenter implements Contract.PresenterContract {
 
-    private final static String TAG = "Presenter layer ";
-
     private Contract.ListViewContract listViewLayer;
     private Contract.MapViewContract mapViewLayer;
 
@@ -52,7 +50,6 @@ public class Presenter implements Contract.PresenterContract {
     public void setUserLocation(Location userLocation) {
         latLng = Utils.getLatLonWithLocation(userLocation);
     }
-
 
 
     //A Unit is selected in the MapViewLayer

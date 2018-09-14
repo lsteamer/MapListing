@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         locationClient = LocationServices.getFusedLocationProviderClient(this);
         requestLocationPermission();
 
-        //Adapter, TabLayout, Location and Retrofit Call are set in a different method.
+        //TabLayout, Location and Retrofit Call are set in a different method.
         startApp();
 
     }
@@ -97,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(@NonNull Call<Feed> call, @NonNull Throwable t) {
-
+                    Toast.makeText(getApplicationContext(), getText(R.string.fail), Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -118,15 +119,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Setting the two fragments to the viewPager
     private void setupViewPager(ViewPager viewPager, ListViewLayer list, MapViewLayer map) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
-        adapter.addFragment(list, getString(R.string.tab_text_1));
-        adapter.addFragment(map, getString(R.string.tab_text_2));
+        adapter.addFragment(list, getString(R.string.tab_title_list));
+        adapter.addFragment(map, getString(R.string.tab_title_map));
         viewPager.setAdapter(adapter);
     }
 
 
-
+    //The location permission must be granted in order for the app to download.
     public boolean requestLocationPermission() {
         if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{ACCESS_FINE_LOCATION}, 1);
@@ -136,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-
+    //As soon as the location is given, we inject it to the presenter.
     private void setLocation() {
         if (ActivityCompat.checkSelfPermission(this, ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
             locationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {

@@ -22,8 +22,6 @@ import lsteamer.elmexicano.com.maplisting.model.CarData;
 
 public class ListViewLayer extends Fragment implements Contract.ListViewContract {
 
-    public static final String TAG = "List";
-
     private Contract.PresenterContract presenter;
 
     private CarAdapter adapter;
