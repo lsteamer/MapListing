@@ -1,4 +1,4 @@
-package lsteamer.elmexicano.com.maplisting.utils;
+package lsteamer.elmexicano.com.maplisting.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

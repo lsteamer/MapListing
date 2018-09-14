@@ -1,8 +1,9 @@
-package lsteamer.elmexicano.com.maplisting.mvp;
+package lsteamer.elmexicano.com.maplisting.view;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -12,10 +13,13 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 
-import lsteamer.elmexicano.com.maplisting.utils.Utils;
+import java.util.Objects;
+
+import lsteamer.elmexicano.com.maplisting.Contract;
+import lsteamer.elmexicano.com.maplisting.Presenter;
 
 
-public class MapView extends SupportMapFragment implements Contract.MapViewContract, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+public class MapViewLayer extends SupportMapFragment implements Contract.MapViewContract, OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     public static final String TAG = "Map";
 
@@ -24,7 +28,7 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
     private Contract.PresenterContract presenter;
     private GoogleMap map;
 
-    public MapView() {
+    public MapViewLayer() {
     }
 
     @Override
@@ -43,14 +47,14 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(Objects.requireNonNull(getActivity()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
         map.setMyLocationEnabled(true);
         map.setOnMarkerClickListener(this);
-        presenter.setMap(map);
-        setCameraToLocation(Utils.getDefaultLatLon(), map);
+
+        setCameraToLocation(presenter.getLocation());
 
     }
 
@@ -69,14 +73,9 @@ public class MapView extends SupportMapFragment implements Contract.MapViewContr
 
     }
 
-    public void setCameraToLocation(LatLng latLng, GoogleMap googleMap){
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
-
+    public void setCameraToLocation(LatLng latLng){
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM));
     }
-
-
-
-
 
 
     @Override

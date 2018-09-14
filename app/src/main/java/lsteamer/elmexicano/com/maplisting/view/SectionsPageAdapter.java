@@ -1,4 +1,4 @@
-package lsteamer.elmexicano.com.maplisting.utils;
+package lsteamer.elmexicano.com.maplisting.view;
 
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;

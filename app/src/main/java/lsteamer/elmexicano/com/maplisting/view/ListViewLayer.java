@@ -1,4 +1,4 @@
-package lsteamer.elmexicano.com.maplisting.mvp;
+package lsteamer.elmexicano.com.maplisting.view;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,11 +15,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import lsteamer.elmexicano.com.maplisting.Contract;
+import lsteamer.elmexicano.com.maplisting.Presenter;
 import lsteamer.elmexicano.com.maplisting.R;
 import lsteamer.elmexicano.com.maplisting.model.CarData;
-import lsteamer.elmexicano.com.maplisting.utils.CarAdapter;
 
-public class ListView extends Fragment implements Contract.ListViewContract {
+public class ListViewLayer extends Fragment implements Contract.ListViewContract {
 
     public static final String TAG = "List";
 
@@ -47,7 +48,6 @@ public class ListView extends Fragment implements Contract.ListViewContract {
     @Override
     public void startAdapter(List<CarData> carDataList) {
 
-        //todo clean this one up later
         carRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new CarAdapter(carDataList, getContext());
         carRecyclerView.setAdapter(adapter);

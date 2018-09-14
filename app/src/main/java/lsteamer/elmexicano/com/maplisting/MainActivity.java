@@ -24,10 +24,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import lsteamer.elmexicano.com.maplisting.model.CarData;
 import lsteamer.elmexicano.com.maplisting.model.Feed;
-import lsteamer.elmexicano.com.maplisting.mvp.ListView;
-import lsteamer.elmexicano.com.maplisting.mvp.MapView;
-import lsteamer.elmexicano.com.maplisting.mvp.Presenter;
-import lsteamer.elmexicano.com.maplisting.utils.SectionsPageAdapter;
+import lsteamer.elmexicano.com.maplisting.view.ListViewLayer;
+import lsteamer.elmexicano.com.maplisting.view.MapViewLayer;
+import lsteamer.elmexicano.com.maplisting.view.SectionsPageAdapter;
 import lsteamer.elmexicano.com.maplisting.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -45,9 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     public FusedLocationProviderClient locationClient;
 
-
-    private ListView listView;
-    private MapView mapView;
+    private ListViewLayer listViewLayer;
+    private MapViewLayer mapViewLayer;
     private Presenter presenter;
 
     private List<CarData> carDataList;
@@ -63,63 +61,70 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
 
-        listView = new ListView();
-        mapView = new MapView();
+        listViewLayer = new ListViewLayer();
+        mapViewLayer = new MapViewLayer();
 
 
         //Location Permissions
         locationClient = LocationServices.getFusedLocationProviderClient(this);
         requestLocationPermission();
 
+        //Adapter, TabLayout, Location and Retrofit Call are set in a different method.
         startApp();
-
-        //Downloading the list through retrofit
-        Call<Feed> data = Utils.getLoginRequestData(Utils.FULL_URL);
-        data.enqueue(new Callback<Feed>() {
-            @Override
-            public void onResponse(@NonNull Call<Feed> call, @NonNull Response<Feed> response) {
-                if (response.body() != null) {
-                    carDataList = response.body().getCarData();
-
-                    presenter.startDataInFragments(carDataList);
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<Feed> call, @NonNull Throwable t) {
-
-            }
-        });
-
 
     }
 
     @OnClick(R.id.landingButton)
     void startApp() {
+        //They are set in a different layout, to have a button in case there's No Location services. We can't go forward without it.
         if (requestLocationPermission()) {
 
+            //Get the user Location
             setLocation();
             sectionsPagerAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 
+            //Downloading the list through retrofit
+            Call<Feed> data = Utils.getLoginRequestData(Utils.FULL_URL);
+            data.enqueue(new Callback<Feed>() {
+                @Override
+                public void onResponse(@NonNull Call<Feed> call, @NonNull Response<Feed> response) {
+                    if (response.body() != null) {
+                        carDataList = response.body().getCarData();
+
+                        presenter.startDataInFragments(carDataList);
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<Feed> call, @NonNull Throwable t) {
+
+                }
+            });
+
+            //Setting the Tab and Adapter
             viewPager = findViewById(R.id.container);
-            setupViewPager(viewPager, listView, mapView);
+            setupViewPager(viewPager, listViewLayer, mapViewLayer);
 
             TabLayout tabLayout = findViewById(R.id.tabs);
             tabLayout.setupWithViewPager(viewPager);
 
+            //Hiding the Landing Layout and showing the tabs
             landingLayout.setVisibility(View.GONE);
             tabbedLayout.setVisibility(View.VISIBLE);
+
+            //Set the presenter
             setPresenter();
 
         }
     }
 
-    private void setupViewPager(ViewPager viewPager, ListView list, MapView map) {
+    private void setupViewPager(ViewPager viewPager, ListViewLayer list, MapViewLayer map) {
         SectionsPageAdapter adapter = new SectionsPageAdapter(getSupportFragmentManager());
         adapter.addFragment(list, getString(R.string.tab_text_1));
         adapter.addFragment(map, getString(R.string.tab_text_2));
         viewPager.setAdapter(adapter);
     }
+
 
 
     public boolean requestLocationPermission() {
@@ -146,7 +151,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setPresenter() {
-        presenter = new Presenter(listView, mapView);
+        presenter = new Presenter(listViewLayer, mapViewLayer);
     }
 
 

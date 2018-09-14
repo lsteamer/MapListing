@@ -1,6 +1,4 @@
-package lsteamer.elmexicano.com.maplisting.mvp;
-
-import android.location.Location;
+package lsteamer.elmexicano.com.maplisting;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -23,16 +21,12 @@ public interface Contract {
         void setMarkerVisible(Marker marker);
         void setMarkerInvisible(Marker marker);
         GoogleMap getMapVariable();
-        void setCameraToLocation(LatLng latLng, GoogleMap googleMap);
+        void setCameraToLocation(LatLng latLng);
     }
 
     interface PresenterContract {
-        Location getLocation();
-        double getLocationLatitude();
-        double getLocationLongitude();
-        List<CarData> getCarDataList();
+        LatLng getLocation();
         void onMapLocationSelected(String tag);
         boolean getUnitSelectedBoolean();
-        void setMap(GoogleMap map);
     }
 }

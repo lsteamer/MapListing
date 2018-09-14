@@ -1,4 +1,4 @@
-package lsteamer.elmexicano.com.maplisting.utils;
+package lsteamer.elmexicano.com.maplisting.view;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
